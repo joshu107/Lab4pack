@@ -3,13 +3,16 @@ linregClass <- setRefClass(
   Class = "linregClass",
 
   fields = list(
-    formula = "formula",
-    data = "data.frame"
+    formula = "formula", data = "data.frame",
+    x = "matrix", y = "numeric",
+    betahat = "matrix", yhat = "matrix", ehat = "matrix",
+    df = "numeric", sigmahat2 = "matrix", varhat = "matrix"
+
   ),
 
   methods = list(
 
-    extract = function(formula, data) {
+    extract = function() {
       #Form X (model)matrix and Y vector out of data using formula
       x <<- model.matrix(object = formula,
                         data = data)
@@ -21,46 +24,44 @@ linregClass <- setRefClass(
 
     coef = function() {
       #extract data for use
-      xy <- extract(formula, data)
-      x <- xy$X
-      y <- xy$y
+      xy <- extract()
+      x <<- xy$X
+      y <<- xy$y
 
       #Calculate regression coefficients
-      betahat <- solve(t(x) %*% x) %*% t(x) %*% y
+      betahat <<- solve(t(x) %*% x) %*% t(x) %*% y
       #format like lm$coefficients output
-      betahat <- t(betahat)
+      betahat <<- t(betahat)
       return(betahat)
     },
 
     pred = function() {
       #extract data for use
-      xy <- extract(formula, data)
-      x <- xy$X
-      betahat <- coef()
+      #xy <- extract()
+      #x <- xy$X
+      #betahat <- coef()
 
       #Calculate the fitted values
-      yhat <- x %*% t(betahat)
+      yhat <<- x %*% t(betahat)
       return(yhat)
     },
 
     resid = function() {
       #extract data for use
-      xy <- extract(formula, data)
-      y <- xy$y
-      yhat <- pred()
+      #xy <- extract(formula, data)
+      #y <- xy$y
+      #yhat <- pred()
 
       #Calculate residuals
-      ehat <- y - yhat
+      ehat <<- y - yhat
       return(ehat)
     },
 
-    print = function(digits = 3, ...) {
-      betahat <- coef()
-
-      res <- cat(paste0("Call:\nlinreg(formula =",
-                   formula, ", data =  iris",
-                   ")\n\nCoefficients :\n", betahat))
-      print(res)
+    stats = function() {
+      #Calculate degrees of freedom
+      df <<- nrow(x) - length(betahat)
+      #calculate residual variance
+      sigmahat
 
     }
   )

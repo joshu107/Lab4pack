@@ -2,8 +2,10 @@ Package: Lab4pack
 Title: Package for ARP Labwork 4
 Version: 0.0.0.9000
 Authors@R: person("Joshua", "Hudson", email = "joshu107@student.liu.se", role = c("aut", "cre"))
-Description: This packages was created to handle linear regression models, by implementing an
-object oriented system.
-Depends: R (>= 3.2.3)
+Description: This packages was created to handle linear regression models, by
+    implementing an object oriented system.
+Depends:
+    R (>= 3.2.3)
 License: What license is it under?
 LazyData: true
+RoxygenNote: 5.0.1
